@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "drive-mate",
   "description": "油费花哪了",
-  "appid": "touristappid",
+  "appid": "wx2f17a9a7367d2a09",
   "setting": {
     "urlCheck": true,
     "es6": false,
@@ -35,5 +35,6 @@
     "ignore": [],
     "include": []
   },
-  "editorSetting": {}
+  "editorSetting": {},
+  "libVersion": "2.31.0"
 }
