@@ -1,38 +1,43 @@
-import { View, Text } from "@tarojs/components";
+import { login } from "@/utils/api.weapp";
+import { View, Text, Button } from "@tarojs/components";
 import Taro, { useLoad } from "@tarojs/taro"
 import { useState } from "react";
+import './index.scss';
 
 const Login = () => {
-    const [user,setUser] = useState();
+
 
     useLoad(() => {
-        console.log('PageLoad');
-        Taro.login({
-            async success ( result) {
-                if(result.code){
-                    console.log('resultcode===>',result.code);
-                    const resp = await Taro.request({
-                        url:'https://islm.xyz/api/login',
-                        data:{
-                            code:result.code,
-                        }
-                    })
-                    if(resp.statusCode===200){
-                        Taro.setStorageSync('token',resp.data.token);
-                        Taro.setStorageSync('user',resp.data.user);
-                        setUser(resp.data.user);
-                    }
-                }else{
-                    console.log('登录失败');
-                }
-            },
-        })
     })
 
     return (
         <View className='login' >
-            <Text >登录页面</Text>
-            <Text >{JSON.stringify(user)}</Text>
+            <Text style={{ marginTop: 60 }}>油费呢</Text>
+
+            <Button
+              type='primary'
+              onClick={login}
+              size='default'
+              style={{
+                    position: 'absolute',
+                    bottom: 120,
+                }}
+            >
+                授权登录
+            </Button>
+
+            <View style={{
+                position: 'absolute',
+                bottom: 60,
+                display: 'flex',
+                justifyContent: 'center',
+                alignContent: 'center',
+                gap:20
+            }}
+            >
+                <Text >隐私协议</Text>
+                <Text >用户协议</Text>
+            </View>
         </View>
     )
 }
