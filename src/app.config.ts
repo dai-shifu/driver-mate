@@ -22,10 +22,10 @@ export default defineAppConfig({
         text:'车辆',
         pagePath:'pages/vehicle/index'
       },
-      {
-        text: '设置',
-        pagePath: 'pages/setting/index'
-      }
+      // {
+      //   text: '设置',
+      //   pagePath: 'pages/setting/index'
+      // }
     ]
   },
   window: {
