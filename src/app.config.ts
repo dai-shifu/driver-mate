@@ -5,7 +5,6 @@ export default defineAppConfig({
     'pages/index/index',
     'pages/vehicle/index',
     'pages/setting/index',
-    'pages/report/index',
     'pages/expenseList/index'
   ],
   tabBar: {

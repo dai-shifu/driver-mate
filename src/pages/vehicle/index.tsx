@@ -1,7 +1,7 @@
 import { addVehicle, getVehicleList } from "@/utils/api.weapp";
 import { Form, SafeArea, Button, Input, Cell, Divider } from "@nutui/nutui-react-taro";
-import { View, Text, } from "@tarojs/components";
-import Taro, { useDidShow, useLoad } from "@tarojs/taro";
+import { View, } from "@tarojs/components";
+import Taro, { useDidShow } from "@tarojs/taro";
 import { useState } from "react";
 
 // 标题：车辆管理
@@ -48,7 +48,7 @@ const Vehicle = () => {
                 {
                     vehicleList?.map(item => {
                         return (
-                            <Cell key={item.id} title={item.plate} />
+                            <Cell key={item?.id} title={item?.plate} />
                         )
                     })
                 }
