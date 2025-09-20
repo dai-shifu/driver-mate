@@ -1,4 +1,4 @@
-import { View,Text } from "@tarojs/components"
+import { View, Text, Form, Button, Picker } from "@tarojs/components"
 
 // 标题：新增消费
 
@@ -12,12 +12,63 @@ import { View,Text } from "@tarojs/components"
 
 // [保存按钮] （提交后 Toast 成功提示）
 
+const objectArray = [
+    {
+        label: '油费',
+        value: 'oil',
+    },
+    {
+        label: '停车',
+        value: 'stop',
+    },
+    {
+        label: '维修',
+        value: 'repair',
+    },
+    {
+        label: '过路费',
+        value: 'over',
+    },
+    {
+        label: '保险',
+        value: 'insurance',
+    },
+    {
+        label: '其他',
+        value: 'other',
+    },
+]
 
-const Expense = ()=>{
+const Expense = () => {
+
+    const onSubmit = ()=>{
+
+    }
+
 
     return (
-        <View >
+        <View style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            height: '100vh',
+            minHeight: '100vh',
+            gap: 20,
+        }}
+        >
             <Text >添加消费</Text>
+
+            <View >
+                <Form onSubmit={onSubmit} >
+                    <View>
+                        <Picker mode='selector'  range={objectArray} rangeKey='label'>
+                        <View>消费类型:{}</View>
+                        </Picker>
+                    </View>
+
+                    <Button >保存</Button>
+                </Form>
+            </View>
         </View>
     )
 }

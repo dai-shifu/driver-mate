@@ -33,14 +33,14 @@ const Home = () => {
             alignItems: 'center',
             height: '100vh',
             minHeight: '100vh',
-            padding: 10,
+            gap:20,
         }}
         >
-            <View style={{ flex: 1, border: '1px solid red' }}>
+            <View style={{ flex: 1,width:'100%'  }}>
 
             </View>
 
-            <View style={{}}>
+            <View style={{height:'auto',marginBottom:40}}>
                 <Button
                   type='primary'
                   size='default'

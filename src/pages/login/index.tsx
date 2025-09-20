@@ -7,7 +7,10 @@ import './index.scss';
 const Login = () => {
 
 
-    useLoad(() => {
+    useLoad( async() => {
+        const res = await Taro.login();
+        const { code } = res;
+        console.log('code==>',code)
     })
 
     return (
@@ -32,7 +35,7 @@ const Login = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignContent: 'center',
-                gap:20
+                gap: 20
             }}
             >
                 <Text >隐私协议</Text>
