@@ -5,7 +5,6 @@ export default defineAppConfig({
     'pages/index/index',
     'pages/vehicle/index',
     'pages/setting/index',
-    'pages/report/index',
     'pages/expenseList/index'
   ],
   tabBar: {
@@ -22,10 +21,10 @@ export default defineAppConfig({
         text:'车辆',
         pagePath:'pages/vehicle/index'
       },
-      {
-        text: '设置',
-        pagePath: 'pages/setting/index'
-      }
+      // {
+      //   text: '设置',
+      //   pagePath: 'pages/setting/index'
+      // }
     ]
   },
   window: {

@@ -1,4 +1,10 @@
-import { View, Text, Form, Button, Picker } from "@tarojs/components"
+import { Cell, SafeArea, Button, Picker, Form, Input, InputNumber, TextArea, DatePicker } from "@nutui/nutui-react-taro"
+import { ArrowRight } from '@nutui/icons-react-taro'
+import { View, } from "@tarojs/components"
+import { useEffect, useState } from "react"
+import { addExpense, getVehicleList } from "@/utils/api.weapp"
+import Taro, { useLoad } from "@tarojs/taro"
+import { pickerOptions } from "@/constant"
 
 // 标题：新增消费
 
@@ -12,63 +18,150 @@ import { View, Text, Form, Button, Picker } from "@tarojs/components"
 
 // [保存按钮] （提交后 Toast 成功提示）
 
-const objectArray = [
-    {
-        label: '油费',
-        value: 'oil',
-    },
-    {
-        label: '停车',
-        value: 'stop',
-    },
-    {
-        label: '维修',
-        value: 'repair',
-    },
-    {
-        label: '过路费',
-        value: 'over',
-    },
-    {
-        label: '保险',
-        value: 'insurance',
-    },
-    {
-        label: '其他',
-        value: 'other',
-    },
-]
-
 const Expense = () => {
 
-    const onSubmit = ()=>{
+    const [form] = Form.useForm();
 
+    useLoad(async () => {
+        const list = await getVehicleList(1, 1);
+        form.setFieldValue('vehicle_id', list[0].id);
+        form.setFieldValue('vehicle_plate', list[0].plate);
+    })
+
+
+
+    const onSubmit = async (values: Record<string, any>) => {
+        const { category_id } = values;
+        const resp = await addExpense({ ...values, category_id: category_id[0] });
+
+        if (resp) {
+            Taro.showToast({
+                title: '添加成功'
+            })
+
+            Taro.navigateBack();
+        }
     }
 
 
     return (
-        <View style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            height: '100vh',
-            minHeight: '100vh',
-            gap: 20,
-        }}
+        <View
+          style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                height: '100vh',
+                minHeight: '100vh',
+                gap: 20,
+                width: '100%',
+            }}
         >
-            <Text >添加消费</Text>
 
-            <View >
-                <Form onSubmit={onSubmit} >
-                    <View>
-                        <Picker mode='selector'  range={objectArray} rangeKey='label'>
-                        <View>消费类型:{}</View>
-                        </Picker>
-                    </View>
+            <Form
+              form={form}
+              style={{ width: '100%' }}
+              divider
+              labelPosition='left'
+              onFinish={onSubmit}
+              onReset={() => form.resetFields()}
+              footer={
+                    <>
+                        <View style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
+                        }}
+                        >
 
-                    <Button >保存</Button>
-                </Form>
-            </View>
+                            <Button nativeType='submit' type='primary' >提交</Button>
+                            <Button nativeType='reset' style={{ marginLeft: 20 }}>重置</Button>
+                        </View>
+                    </>
+                }
+            >
+                <Form.Item label='车辆' name='vehicle_id' style={{ display: 'none' }}>
+                    <Input ></Input>
+                </Form.Item>
+                <Form.Item label='车牌号' name='vehicle_plate' disabled>
+                    <Input  ></Input>
+                </Form.Item>
+                <Form.Item
+                  label='费用类型'
+                  name='category_id'
+                  trigger='onConfirm'
+                  getValueFromEvent={(...args) => args[1]}
+                  onClick={(event, ref: any) => ref.open()}
+                  rules={[{ required: true, message: '请选择费用类型' }]}
+                >
+                    <Picker options={[pickerOptions]} >
+                        {(value: any) => {
+                            return (
+                                <Cell
+                                  style={{
+                                        padding: 0,
+                                        '--nutui-cell-divider-border-bottom': '0',
+                                    }}
+                                  className='nutui-cell--clickable'
+                                  title={
+                                        value.length
+                                            ? pickerOptions.filter((po) => po.value === value[0])[0]
+                                                ?.label
+                                            : 'Please select'
+                                    }
+                                  extra={<ArrowRight />}
+                                  align='center'
+                                />
+                            )
+                        }}
+
+                    </Picker>
+                </Form.Item>
+
+                <Form.Item label='消费金额' name='amount' rules={[{ required: true, message: '请输入消费金额' }]}>
+                    <InputNumber min={0} digits={2} ></InputNumber>
+                </Form.Item>
+                <Form.Item
+                  label='消费时间'
+                  name='occurred_at'
+                  trigger='onConfirm'
+                  getValueFromEvent={(...args) => {
+                        return new Date(args[1].join('/'))
+                    }}
+                  onClick={(event, ref: any) => {
+                        ref.open()
+                    }}
+                  initialValue={new Date()}
+                  rules={[{ required: true, message: '请选择消费时间' }]}
+                >
+                    <DatePicker>
+                        {(value: any) => {
+                            return (
+                                <Cell
+                                  style={{
+                                        padding: 0,
+                                        '--nutui-cell-divider-border-bottom': '0',
+                                    }}
+                                  className='nutui-cell--clickable'
+                                  title={
+                                        value
+                                            ? new Date(value).toLocaleDateString()
+                                            : 'Please select'
+                                    }
+                                  extra={<ArrowRight />}
+                                  align='center'
+                                />
+                            )
+                        }}
+                    </DatePicker>
+
+                </Form.Item>
+
+                <Form.Item label='备注' name='remark' >
+                    <TextArea rows={3} />
+                </Form.Item>
+
+            </Form>
+            <SafeArea position='bottom' />
         </View>
     )
 }

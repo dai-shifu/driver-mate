@@ -1,5 +1,11 @@
-import { View, Text, Button } from "@tarojs/components";
-import Taro, { useLoad } from "@tarojs/taro"
+import { Cell, SafeArea, Tabbar, Button, NoticeBar } from "@nutui/nutui-react-taro";
+import { View, Text } from "@tarojs/components";
+import Taro, { useDidShow, useLoad } from "@tarojs/taro"
+import { IExpense } from "../expenseList";
+import { useState } from "react";
+import { getExpenseList } from "@/utils/api.weapp";
+import dayjs from "dayjs";
+import { pickerOptions } from "@/constant";
 
 // [顶部] 标题：我的用车账本
 
@@ -16,7 +22,11 @@ import Taro, { useLoad } from "@tarojs/taro"
 
 
 const Home = () => {
-    useLoad(() => {
+    const [expenseList, setExpenseList] = useState<IExpense[]>([]);
+
+    useDidShow(async () => {
+        const resp = await getExpenseList(1, 3);
+        setExpenseList(resp);
         console.log('Demo page loaded.');
     });
 
@@ -27,28 +37,55 @@ const Home = () => {
     }
 
     return (
-        <View style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            height: '100vh',
-            minHeight: '100vh',
-            gap:20,
-        }}
+        <View
+          style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                height: '100vh',
+                minHeight: '100vh',
+                gap: 20,
+
+                width: '100%',
+            }}
         >
-            <View style={{ flex: 1,width:'100%'  }}>
+            <NoticeBar >请先添加车辆</NoticeBar>
+            
+            <Cell >
+                <View>本月支持总额</View>
+            </Cell>
 
-            </View>
+            {/* <Cell >
+                这里是统计
+            </Cell> */}
 
-            <View style={{height:'auto',marginBottom:40}}>
+            <Cell.Group
+              title='最近消费'
+              style={{ width: '100%' }}
+            >
+                {expenseList?.map(item => {
+                    const { occurred_at, category_id, amount, vehicle_id } = item;
+                    const date = dayjs(occurred_at).format('MM月DD日');
+                    const category = pickerOptions.find(item => item.value == category_id)?.label;
+                    return (
+                        <Cell key={item.id} title={`${date} | ${category} | ￥${amount}`} >
+
+                        </Cell>
+                    )
+                })}
+            </Cell.Group>
+
+
+            <View style={{ height: 'auto' }}>
                 <Button
                   type='primary'
-                  size='default'
+                  size='normal'
                   onClick={onClick}
                 >
                     添加消费
                 </Button>
             </View>
+            <SafeArea position='bottom' />
         </View>
     )
 }

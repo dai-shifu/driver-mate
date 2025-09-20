@@ -1,16 +1,18 @@
 import { login } from "@/utils/api.weapp";
-import { View, Text, Button } from "@tarojs/components";
+import { View, Text, } from "@tarojs/components";
 import Taro, { useLoad } from "@tarojs/taro"
-import { useState } from "react";
+import { Button, SafeArea } from '@nutui/nutui-react-taro'
+
+
 import './index.scss';
 
 const Login = () => {
 
 
-    useLoad( async() => {
+    useLoad(async () => {
         const res = await Taro.login();
         const { code } = res;
-        console.log('code==>',code)
+        console.log('code==>', code)
     })
 
     return (
@@ -20,7 +22,7 @@ const Login = () => {
             <Button
               type='primary'
               onClick={login}
-              size='default'
+              size='normal'
               style={{
                     position: 'absolute',
                     bottom: 120,
@@ -41,6 +43,7 @@ const Login = () => {
                 <Text >隐私协议</Text>
                 <Text >用户协议</Text>
             </View>
+            <SafeArea position='bottom' />
         </View>
     )
 }

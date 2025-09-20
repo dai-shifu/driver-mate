@@ -2,7 +2,7 @@
   "libVersion": "3.10.0",
   "projectname": "drive-mate",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "coverView": false,
     "lazyloadPlaceholderEnable": false,
     "skylineRenderEnable": false,

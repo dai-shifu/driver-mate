@@ -1,6 +1,9 @@
+import { pickerOptions } from "@/constant";
 import { getExpenseList } from "@/utils/api.weapp";
+import { Cell } from "@nutui/nutui-react-taro";
 import { View, Text, Label } from "@tarojs/components"
 import { useLoad } from "@tarojs/taro";
+import dayjs from "dayjs";
 import { useState } from "react";
 
 // 标题：消费记录
@@ -15,7 +18,7 @@ import { useState } from "react";
 
 // 点击记录 → 详情页（显示完整信息 + 删除/编辑）
 
-interface IExpense {
+export interface IExpense {
     "id": number //  1,
     "user_id": number // 1,
     "vehicle_id": number // 2,
@@ -38,20 +41,21 @@ const ExpenseList = () => {
 
     return (
         <View>
-            <Text >消费列表页</Text>
-            <View>
-                {expenseList.map(item => {
+            <Cell.Group
+              title='消费列表'
+              style={{ width: '100%' }}
+            >
+                {expenseList?.map(item => {
+                    const { occurred_at, category_id, amount, vehicle_id } = item;
+                    const date = dayjs(occurred_at).format('MM月DD日');
+                    const category = pickerOptions.find(item => item.value == category_id)?.label;
                     return (
-                        <View key={item.id}>
-                            <Text>消费类型:{item.category_id}</Text>
-                            <Text>金额:{item.amount}</Text>
-                            <Text>车辆:{item.vehicle_id}</Text>
-                            <Text>时间:{item.occurred_at}</Text>
-                            <Text>备注:{item.remark}</Text>
-                        </View>
+                        <Cell key={item.id} title={`${date} | ${category} | ￥${amount}`} >
+
+                        </Cell>
                     )
                 })}
-            </View>
+            </Cell.Group>
         </View>
     )
 }
